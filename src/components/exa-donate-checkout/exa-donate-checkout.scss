@@ -1,0 +1,106 @@
+@import "../../assets/sass/foundations.scss";
+
+exa-donate-checkout {
+    .thank-you {
+        padding: gutter();
+        margin-bottom: 20px;
+    }
+    .amount-banner {
+        //background: $grey;
+        text-align: center;
+        padding: 36px 0;
+        color: black;
+        .edit {
+            text-align: center;
+            margin-top: 12px;
+            display: inline-block;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        .amount {
+            width: 100%;
+            font-family: 'pt sans';
+            font-weight: bold;
+            font-size: 3em;
+            .clap {
+                font-size: .5em;
+                position: relative;
+                bottom: .3em;
+                padding-left: 10px;
+            }
+        }
+    }
+    form.validations {
+        input:required:not(:valid) {
+            border: 1px solid red;
+            background: rgba(red,.03);
+        }
+    }
+    form {
+        .form-section {
+            margin-top: 18px;
+            margin-bottom: 26px;
+            & > span {
+                float: left;
+                width: col(3);
+                margin-left: gutter();
+                padding-bottom: 12px;
+                input, &.stripe {
+                    padding: 12px 6px;
+                    font-family: arial;
+                    border-radius: 3px;
+                    border: 1px solid $greyBorder;
+                    display: inline-block;
+                }
+                input {
+                    width: 100%;
+                }
+                label { 
+                    width: 100%;
+                    padding-bottom: 3px;
+                    display: inline-block;
+                }
+            }
+            & > .stripe {
+                padding: 9px 15px 9px;
+                width: col(3);
+            }
+            & > h4 {
+                margin: 6px gutter() 0;
+                border-top: 1px solid $grey;
+                padding: 6px 0 24px;
+            }
+        }
+        input[type="submit"] {
+            color: white;
+            background: $blue;
+            width: col(2,2);
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 4px;
+            font-family: 'pt sans';
+            padding: 15px 0;
+            margin: 24px auto;
+            display: block;
+        }
+    }
+}
+
+@include breakpoint("tablet") {
+    exa-donate-checkout {
+        form .form-section {
+            & > span.col2 {
+                width: col(2);
+            }
+            & > span.col4 {
+                width: col(4);
+            }
+            & > .stripe {
+                padding: 9px 15px 9px;
+                width: col(6);
+            }
+        }
+    }
+}
