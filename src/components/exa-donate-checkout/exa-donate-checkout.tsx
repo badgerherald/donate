@@ -1,5 +1,4 @@
 import { Component, h, State, Prop, Event, EventEmitter } from '@stencil/core';
-import { parseConfigFileTextToJson } from 'typescript';
 
 declare const exa: any
 @Component({
