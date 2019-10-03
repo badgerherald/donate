@@ -9,9 +9,12 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface ExaDonateAmount {}
+  interface ExaDonateAmount {
+    'reoccuring': number;
+  }
   interface ExaDonateCheckout {
     'amount': number;
+    'reoccuring': number;
   }
   interface ExaDonateNav {
     'amount': number;
@@ -65,11 +68,14 @@ declare global {
 declare namespace LocalJSX {
   interface ExaDonateAmount {
     'onAmountChanged'?: (event: CustomEvent<number>) => void;
+    'onReoccuringChanged'?: (event: CustomEvent<number>) => void;
+    'reoccuring'?: number;
   }
   interface ExaDonateCheckout {
     'amount'?: number;
     'onChangeAmount'?: (event: CustomEvent<any>) => void;
     'onCheckoutFinished'?: (event: CustomEvent<any>) => void;
+    'reoccuring'?: number;
   }
   interface ExaDonateNav {
     'amount'?: number;

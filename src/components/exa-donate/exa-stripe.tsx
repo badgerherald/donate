@@ -11,9 +11,15 @@ export class ExaStripe {
   private checkout;
   private kiosk;
 
+  @State() reoccuring = 2
+
   async setAmount(number) {
     this.amount = number
     this.isCheckout = true
+  }
+
+  setReoccuring(perYear) {
+    this.reoccuring = perYear
   }
 
   // Static pieces: 
@@ -41,9 +47,7 @@ export class ExaStripe {
     if(this.isCheckout) {
       return
     }
-
-    this.kiosk = <exa-donate-amount onAmountChanged={ev => {this.setAmount(ev.detail)}} />
-
+    this.kiosk = <exa-donate-amount reoccuring={this.reoccuring} onAmountChanged={ev => {this.setAmount(ev.detail)}} onReoccuringChanged={ev => this.setReoccuring(ev.detail)} />
     return this.kiosk
   }
 
@@ -52,7 +56,7 @@ export class ExaStripe {
       return;
     }
 
-    this.checkout = <exa-donate-checkout amount={this.amount} onChangeAmount={_ => this.isCheckout = false} />
+    this.checkout = <exa-donate-checkout reoccuring={this.reoccuring} amount={this.amount} onChangeAmount={_ => this.isCheckout = false}  />
     this.checkout.amount = this.amount
     return this.checkout
   }

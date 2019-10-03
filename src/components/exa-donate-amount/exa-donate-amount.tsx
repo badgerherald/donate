@@ -1,4 +1,4 @@
-import { Component, State, h, EventEmitter, Event } from '@stencil/core';
+import { Component, State, h, EventEmitter, Event, Prop } from '@stencil/core';
 
 @Component({
   tag: 'exa-donate-amount',
@@ -9,10 +9,12 @@ export class ExaDonateAmount {
   private defaults = [10, 25, 50, 75, 125, 250, 500] 
   
   @State() amount : number
+  @Prop() reoccuring : number
   @State() isCustomAmount : boolean = false;
   @State() isTyping : boolean
 
   @Event() amountChanged : EventEmitter<number>
+  @Event() reoccuringChanged : EventEmitter<number>
 
   renderAmountSection() {
     return [
@@ -32,13 +34,18 @@ export class ExaDonateAmount {
     }
   }
 
+  private setReoccuring(perYear) {
+    this.reoccuringChanged.emit(perYear)
+  }
+
   private renderAmountGrid() {
     return [
-      <ul>
-        <li>Monthly</li>
-        <li>Each Semester</li>
-        <li>One Time</li>
+      <ul class="reoccuring">
+        <li><a class={this.reoccuring == 12 ? "active" : ""} onClick={_ => this.setReoccuring(12)}>Monthly</a></li>
+        <li><a class={this.reoccuring == 2 ? "active" : ""} onClick={_ => this.setReoccuring(2)}>Each Semester</a></li>
+        <li><a class={this.reoccuring == 0 ? "active" : ""} onClick={_ => this.setReoccuring(0)}>One Time</a></li>
       </ul>,
+      <div class="clearfix"></div>,
       <ul>
         {
           this.defaults.map(amount => 

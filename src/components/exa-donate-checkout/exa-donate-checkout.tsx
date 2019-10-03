@@ -8,6 +8,7 @@ declare const exa: any
 export class ExaDonateCheckout {
 
   @Prop() amount: number = 0;
+  @Prop() reoccuring: number;
   @State() streetPlaceholder
   @State() saving = false
 
@@ -16,7 +17,7 @@ export class ExaDonateCheckout {
   @Event() changeAmount : EventEmitter
   @Event() checkoutFinished : EventEmitter
 
-  private stripe = Stripe('pk_test_Q8vFrqj9PDgGwvSKYFXqy71200pcZ4d5X5');
+  private stripe = Stripe('pk_test_QwSvTb6WNbyjHufpowvFiAww');
 
   private cardRef 
   private stripeCard = this.stripe.elements().create('card')
@@ -27,6 +28,7 @@ export class ExaDonateCheckout {
   private emailField
   private phoneField
   private commentField
+  private anonymousField 
 
   private streetField 
   private aptField 
@@ -91,10 +93,12 @@ export class ExaDonateCheckout {
           'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        amount: 42.00,
+        amount: this.amount,
+        reoccurance: this.reoccuring,
         token: token.id,
         nonce: "asd",
         email: this.emailField.value,
+        anonymous: this.anonymousField.value,
         phone: this.phoneField.value,
         year: this.yearField.value,
         comment: this.commentField.value,
@@ -141,12 +145,26 @@ export class ExaDonateCheckout {
 
   render() {
     if(this.done) {
-      return <div class="thank-you"><h3>Thank you! 🎉</h3> <p>In the future, this will also send an email reciept. And look better. <a class="edit" onClick={_ => this.emitEditAmount()}>Start Over</a></p></div>
+      return <div class="thank-you"><h3>Thank you! 🎉</h3> <p>Thank you for your Donation to The Badger Herald. Please check your email for a reciept. <br />
+      <a class="edit" onClick={_ => this.emitEditAmount()}>Start Over</a></p></div>
+    }
+    var details;
+    if(this.reoccuring > 0) {
+      details = [<br/>,
+      <span class="reocurring">{this.reoccuring == 2 ? "each semester" : ""}{this.reoccuring == 12 ? "monthly" : ""}</span>, 
+      <br/>,
+      <span class="details">{this.reoccuring == 2 ? "Charged October " + new Date().getDate() + " and April " + new Date().getDate() : ""}{this.reoccuring == 12 ? "Charged on the " + new Date().getDate() + "th of each month" : ""}</span>]
     }
     return [
     <div class="amount-banner">
-      <span class="amount">${this.amount}<span class="clap"></span></span><br />
-      <a class="edit" onClick={_ => this.emitEditAmount()}>Change Amount</a>
+      <span class="dollar">$</span> 
+      <span class="amount">
+        {this.amount}
+       
+      </span>
+      {details}
+      <br/>
+      <a class="edit" onClick={_ => this.emitEditAmount()}>change</a>
     </div>,
     <form ref={r => this.form = r} onSubmit={e => this.submit(e)} >
       <div class="form-section">
@@ -168,15 +186,20 @@ export class ExaDonateCheckout {
           <input required={true} name="phone" type="text" placeholder="608-257-4809 (required)" ref={ref => this.phoneField = ref} />
         </span>
         <span class="col2">
-          <label>Final Year *</label>
+          <label>Graduated *</label>
           <input required={true} name="final-year" type="text" placeholder="1969 (required)" onChange={_ => this.yearChanged() } ref={ ref=>this.yearField = ref} />
         </span>
         <span class="col4">
           <label>Comment</label>
           <input name="comment" type="text" ref={ref => this.commentField = ref}/>
         </span>
+        <span class="col2">
+          <label>Keep Anonymous *</label>
+          <input name="anonymous" type="checkbox" ref={ ref=> this.anonymousField = ref} />
+        </span>
         <div class="clearfix"></div>
       </div>
+
 
       <div class="form-section">
         <h4>Mailing Address</h4>
@@ -208,7 +231,7 @@ export class ExaDonateCheckout {
         <span class="stripe" ref={ref => this.cardRef = ref} />
         <div class="clearfix"></div>
       </div>
-      <input type="submit" value={this.saving ? "saving..." : "submit"} onMouseUp={_ => this.runValidations()} />
+      <input type="submit" value={this.saving ? "saving..." : "Donate $" + this.amount + (this.reoccuring == 2 ? " each semester" : "") + (this.reoccuring == 12 ? " monthly" : "")} onMouseUp={_ => this.runValidations()} />
     </form>
     ]
   }
