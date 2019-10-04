@@ -13,14 +13,13 @@ exa-donate-amount {
 		margin-bottom: 15px;
 
 		li {
-			display: inline;
+			margin: 18px 0;
 			a {
 				color: black;
 				padding: 10px;
 				padding-left: 34px;
 				border-radius: 6px;
 				position:relative;
-				margin: 0 6px;
 				font-weight: bold;
 				&:hover {
 					cursor: pointer;
@@ -31,7 +30,7 @@ exa-donate-amount {
 					height: 16px;
 					border-radius: 12px;
 					left: 10px;
-					margin-top: 10px;
+					top: 10px;
 					position: absolute;
 					-webkit-box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.3);
 					-moz-box-shadow: 0px 0px 0px 2px rgba(0,0,0,0.3);
@@ -52,7 +51,7 @@ exa-donate-amount {
 				}
 				&:hover {
 					color: $blue;
-					background-color: $lightgrey	
+					background-color: $lightgrey;	
 				}
 			}
 			text-align: center;
@@ -166,6 +165,14 @@ exa-donate-amount {
 }
 
 @include breakpoint("tablet") {
+	exa-donate-amount {
+		ul.reoccuring {
+			li {
+				margin: 0;
+				display: inline;
+			}
+		}
+	}
 	.container.article-display .article-text .donate-form {
 		//width: col(6);
 		ul {

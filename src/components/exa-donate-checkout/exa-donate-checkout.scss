@@ -1,6 +1,18 @@
 @import "../../assets/sass/foundations.scss";
 
 exa-donate-checkout {
+    span.col2 {
+        position: relative;
+    }
+    #card-errors {
+        background: red;
+        background: #FFD0D0;
+        border: 1px solid #d97b7b;
+        padding: 6px;
+        margin: 0 gutter();
+        border-radius: 3px;
+        margin-bottom: 12px;
+    }
     .thank-you {
         padding: gutter();
         margin-bottom: 20px;
@@ -93,7 +105,20 @@ exa-donate-checkout {
                     padding-bottom: 3px;
                     display: inline-block;
                 }
+                .anon-check {
+                    position: absolute;
+                    left: 0;
+                    width: initial;
+                    top: 6px;
+                }
+                .anon-label {
+                    padding-left: 20px;
+                }
             }
+            .floater {
+                float: left;
+                width: inherit;
+            } 
             & > .stripe {
                 padding: 9px 15px 9px;
                 width: col(3);
@@ -102,8 +127,11 @@ exa-donate-checkout {
                 margin: 6px gutter() 0;
                 border-top: 1px solid $grey;
                 padding: 6px 0 24px;
+                font-size: 1.2em;
+                font-family: 'pt sans', 'pt sans narrow';
             }
         }
+
         input[type="submit"] {
             color: white;
             background: $blue;
@@ -116,6 +144,9 @@ exa-donate-checkout {
             padding: 15px 40px;
             margin: 24px auto;
             display: block;
+            &[value="saving..."] {
+                opacity: .5;
+            }
         }
     }
 }

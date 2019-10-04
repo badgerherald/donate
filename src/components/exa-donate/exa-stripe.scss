@@ -35,6 +35,10 @@ exa-donate {
         margin: 15px gutter() 24px;
         color: grey;
     }
+    .disclaimer a {
+        color: grey;
+        text-decoration: underline;
+    }
 }
 
 @include breakpoint('tablet') {

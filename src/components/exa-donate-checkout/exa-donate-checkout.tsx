@@ -7,6 +7,7 @@ declare const exa: any
 })
 export class ExaDonateCheckout {
 
+  @Prop() serverError;
   @Prop() amount: number = 0;
   @Prop() reoccuring: number;
   @State() streetPlaceholder
@@ -34,7 +35,7 @@ export class ExaDonateCheckout {
   private aptField 
   private yearField
   private cityField 
-  private countryField 
+  private stateField 
   private zipField
 
   componentDidLoad() {
@@ -43,10 +44,19 @@ export class ExaDonateCheckout {
   }
 
   yearChanged() {
-    if(this.yearField.value && this.yearField.value < 2014) {
-      this.streetField.placeholder = "326 W Gorham St"
-    } else {
+    if(!this.yearField.value) {
+      this.streetField.placeholder = "152 W Johnson St"
+      return;
+    }
 
+    if(this.yearField.value < 1974) {
+      this.streetField.placeholder = "638 State St."
+    } else if(this.yearField.value < 1998) {
+      this.streetField.placeholder = "550 State St."
+    } else if(this.yearField.value < 2014) {
+      this.streetField.placeholder = "326 W. Gorham St."
+    } else {
+      this.streetField.placeholder = "152 W. Johnson St."
     }
   }
 
@@ -105,12 +115,15 @@ export class ExaDonateCheckout {
         street: this.streetField.value,
         apt: this.aptField.value,
         city: this.cityField.value,
-        country: this.countryField.value,
+        country: this.stateField.value,
         zip: this.zipField.value,
       }),
     }).then(response => response.json()).then(json => {
       if(json.success) {
         this.done = true;
+      } else {
+        this.serverError = json.error;
+        this.saving = false;
       }
     }); // parses JSON response into native JavaScript objects 
   }
@@ -194,18 +207,18 @@ export class ExaDonateCheckout {
           <input name="comment" type="text" ref={ref => this.commentField = ref}/>
         </span>
         <span class="col2">
-          <label>Keep Anonymous *</label>
-          <input name="anonymous" type="checkbox" ref={ ref=> this.anonymousField = ref} />
+          <input class="anon-check" name="anonymous" type="checkbox" ref={ ref=> this.anonymousField = ref} />
+          <label class="anon-label" >Keep Anonymous</label>
+          
         </span>
         <div class="clearfix"></div>
       </div>
-
 
       <div class="form-section">
         <h4>Mailing Address</h4>
         <span class="col4">
           <label>Street *</label>
-          <input required={true} name="street" type="text" placeholder="" ref ={ ref=>this.streetField = ref}/>
+          <input required={true} name="street" type="text" placeholder="152 W. Johnson St." ref ={ ref=>this.streetField = ref}/>
         </span>
         <span class="col2">
           <label>Apt/No</label>
@@ -216,8 +229,8 @@ export class ExaDonateCheckout {
           <input required={true} name="city" type="text" placeholder="Madison" ref={ ref => this.cityField = ref } />
         </span>
         <span class="col2">
-          <label>Country *</label>
-          <input required={true} name="country" type="text" placeholder="United States" ref={ ref => this.countryField = ref } />
+          <label>State *</label>
+          <input required={true} name="state" type="text" placeholder="Wi" ref={ ref => this.stateField = ref } />
         </span>
         <span class="col2">
           <label>Zip *</label>
@@ -228,6 +241,7 @@ export class ExaDonateCheckout {
       
       <div class="form-section">
         <h4>Payment</h4>
+        {this.serverError ? <div id="card-errors">{this.serverError}</div> : ""}
         <span class="stripe" ref={ref => this.cardRef = ref} />
         <div class="clearfix"></div>
       </div>

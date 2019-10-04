@@ -36,7 +36,7 @@ export class ExaStripe {
 
   renderDisclaimer() {
     return [<div class="disclaimer">
-      <p>The Badger Herald is a 501c(3). All donations tax deductable. EIN 39-1129947. See 990s here.</p>
+      <p>The Badger Herald is a 501c(3). All donations tax deductable. EIN 39-1129947. See 990s <a href="https://projects.propublica.org/nonprofits/organizations/391129947">here</a>.</p>
       <p>Payments processed by Stripe.</p>
       </div>
     ]

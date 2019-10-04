@@ -15,6 +15,7 @@ export namespace Components {
   interface ExaDonateCheckout {
     'amount': number;
     'reoccuring': number;
+    'serverError': any;
   }
   interface ExaDonateNav {
     'amount': number;
@@ -76,6 +77,7 @@ declare namespace LocalJSX {
     'onChangeAmount'?: (event: CustomEvent<any>) => void;
     'onCheckoutFinished'?: (event: CustomEvent<any>) => void;
     'reoccuring'?: number;
+    'serverError'?: any;
   }
   interface ExaDonateNav {
     'amount'?: number;

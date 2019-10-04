@@ -29,7 +29,7 @@ export class ExaDonateAmount {
   private setAmount(amount, custom, emit) {
     this.amount = amount 
     this.isCustomAmount = amount > 0 && custom 
-    if(emit) {
+    if(emit && amount > 0) {
       this.amountChanged.emit(amount)
     }
   }
@@ -54,7 +54,7 @@ export class ExaDonateAmount {
         }
         <li class="suggestion">
           <span class={((this.amount > 0 && this.isCustomAmount) || this.isTyping) ? "current custom" : "custom"} >
-            <input type="number" value={this.isCustomAmount ? this.amount : ""} placeholder="Custom" onFocus={_ => {this.isTyping = true; this.isCustomAmount = true} } onBlur={e => {this.isTyping = false; this.setAmount(parseInt((e.target as HTMLInputElement).value,10),true,true)} } />
+            <input type="number" value={this.isCustomAmount ? this.amount : ""} placeholder="1969" onFocus={_ => {this.isTyping = true; this.isCustomAmount = true} } onBlur={e => {this.isTyping = false; this.setAmount(parseInt((e.target as HTMLInputElement).value,10),true,true)} } />
           </span>
           {this.isCustomAmount || this.isTyping ? <button class="button"><span class="hidden">Submit</span></button> : undefined}
         </li>
