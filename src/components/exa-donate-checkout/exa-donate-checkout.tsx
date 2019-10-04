@@ -49,7 +49,7 @@ export class ExaDonateCheckout {
       return;
     }
 
-    if(this.yearField.value < 1974) {
+    if(this.yearField.value < 1978) {
       this.streetField.placeholder = "638 State St."
     } else if(this.yearField.value < 1998) {
       this.streetField.placeholder = "550 State St."
@@ -108,7 +108,7 @@ export class ExaDonateCheckout {
         token: token.id,
         nonce: "asd",
         email: this.emailField.value,
-        anonymous: this.anonymousField.value,
+        anonymous: this.anonymousField.checked,
         phone: this.phoneField.value,
         year: this.yearField.value,
         comment: this.commentField.value,
