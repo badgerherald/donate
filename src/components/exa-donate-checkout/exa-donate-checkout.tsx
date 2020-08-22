@@ -96,7 +96,7 @@ export class ExaDonateCheckout {
   }
 
   async processDonation(token) {
-    return fetch(exa.api_url + "/hexa/v1/process-donation", {
+    return fetch("/wp-json/hexa/v1/process-donation", {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
       headers: {

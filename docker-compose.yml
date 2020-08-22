@@ -18,7 +18,6 @@ services:
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
       WORDPRESS_CONFIG_EXTRA: | 
-        /* Domain */
         define('STRIPE_PUBLISHABLE_KEY', '${STRIPE_PUBLISHABLE_KEY}');
         define('STRIPE_SECRET_KEY', '${STRIPE_SECRET_KEY}');
         define('STRIPE_MONTHLY_PLAN', '${STRIPE_MONTHLY_PLAN}');

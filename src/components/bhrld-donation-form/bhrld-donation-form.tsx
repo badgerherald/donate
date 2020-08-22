@@ -3,7 +3,6 @@ import { Component, State, h } from '@stencil/core';
 @Component({
   tag: 'bhrld-donation-form',
   styleUrl: 'bhrld-donation-form.scss',
-  shadow: true,
 })
 export class HeraldDonationForm {
   @State() amount : number
