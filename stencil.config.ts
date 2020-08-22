@@ -28,7 +28,7 @@ export const config: Config = {
   ],
   plugins: [
 		sass()
-	],
+  ]
 };
 
 

@@ -23,6 +23,6 @@
 
 </head>
 <body>
-  <bh-donate-form></bh-donate-form>
+  <bhrld-donation-form></bhrld-donation-form>
 </body>
 </html>

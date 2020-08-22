@@ -10,18 +10,18 @@ define( 'HEXA_DONATION_REOCCURANCE_MONTHLY', 12);
 /**
  * Add stripe when the donate form is used.
  */
-function hexa_donation_form( $atts ) {
-	return "<exa-stripe class='shadow'></exa-stripe>";
+function bhrld_donation_form( $atts ) {
+	return "<bhrld-donation-form></bhrld-donation-form>";
 }
-add_shortcode( 'hexa_donor_form', 'hexa_donation_form' );
+add_shortcode( 'badgerherald_donation_form', 'bhrld_donation_form' );
 
 /**
  * Enqueue hexa scripts and styles.
  */
-function bhdonate_donate_enqueue() {
+function hrld_donate_enqueue() {
     wp_enqueue_script('', 'https://js.stripe.com/v3/',null,null,false);
 }
-add_action('wp_enqueue_scripts', 'bhdonate_donate_enqueue');
+add_action('wp_enqueue_scripts', 'hrld_donate_enqueue');
 
 /**
  * Entrypoint of process-donation route
