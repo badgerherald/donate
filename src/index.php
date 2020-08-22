@@ -23,11 +23,6 @@
 
 </head>
 <body>
-  <div class="container article-display">
-    <div class="article-text">
-      <exa-stripe></exa-stripe>
-    </div>
-  </div>
-
+  <bh-donate-form></bh-donate-form>
 </body>
 </html>

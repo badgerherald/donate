@@ -5,6 +5,13 @@ exa-donate {
     display: block;
 }
 
+.donate-form * {
+    margin : 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 15px;
+}
+
 .donate-form {
     @include setGrid(3,88,10,2);
     background-color: white;

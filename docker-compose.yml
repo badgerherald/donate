@@ -17,6 +17,12 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_CONFIG_EXTRA: | 
+        /* Domain */
+        define('STRIPE_PUBLISHABLE_KEY', '${STRIPE_PUBLISHABLE_KEY}');
+        define('STRIPE_SECRET_KEY', '${STRIPE_SECRET_KEY}');
+        define('STRIPE_MONTHLY_PLAN', '${STRIPE_MONTHLY_PLAN}');
+        define('STRIPE_SEMESTERLY_PLAN', '${STRIPE_SEMESTERLY_PLAN}');
 
   mariadb:
     container_name: donate-mariadb
@@ -24,7 +30,7 @@ services:
     volumes:
       - donate-mariadb:/var/lib/mysql:rw
     restart: always
-    command: mysqld --innodb-buffer-pool-size=128M
+    command: mysqld --innodb-buffer-pool-size=512M
     expose:
       - 3306
     environment:

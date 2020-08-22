@@ -1,11 +1,11 @@
 import { Component, State, h } from '@stencil/core';
 
 @Component({
-  tag: 'exa-stripe',
-  styleUrl: 'exa-stripe.scss',
+  tag: 'bh-donate-form',
+  styleUrl: 'bh-donate-form.scss',
   shadow: true,
 })
-export class ExaStripe {
+export class HeraldDonateForm {
   @State() amount : number
   @State() isCheckout: Boolean
 

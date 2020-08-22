@@ -1,17 +1,31 @@
 <?php
 require_once('lib/stripe-php-7.0.2/init.php');
 
-\Stripe\Stripe::setApiKey(STRIPE_SK);
+\Stripe\Stripe::setApiKey(STRIPE_SECRET_KEY);
 
 define( 'HEXA_DONATION_REOCCURANCE_ONCE', 0);
 define( 'HEXA_DONATION_REOCCURANCE_SEMESTERLY', 2);
 define( 'HEXA_DONATION_REOCCURANCE_MONTHLY', 12);
 
+/**
+ * Add stripe when the donate form is used.
+ */
 function hexa_donation_form( $atts ) {
 	return "<exa-stripe class='shadow'></exa-stripe>";
 }
 add_shortcode( 'hexa_donor_form', 'hexa_donation_form' );
 
+/**
+ * Enqueue hexa scripts and styles.
+ */
+function bhdonate_donate_enqueue() {
+    wp_enqueue_script('', 'https://js.stripe.com/v3/',null,null,false);
+}
+add_action('wp_enqueue_scripts', 'bhdonate_donate_enqueue');
+
+/**
+ * Entrypoint of process-donation route
+ */
 function hexa_process_donation( WP_REST_Request $request ) {
     $amount = $request->get_param( 'amount' );
     $token = $request->get_param( 'token' );
@@ -74,7 +88,7 @@ function hexa_process_donation( WP_REST_Request $request ) {
 				"customer" => $customer->id,
 				"items" => [
 				  [
-					"plan" => STRIPE_SEMESTER_PLAN,
+					"plan" => STRIPE_SEMESTERLY_PLAN,
 					"quantity" => $amountInCents // charged at 0.01¢ each 
 				  ],
 				]
@@ -138,11 +152,13 @@ function hexa_process_donation( WP_REST_Request $request ) {
 
 function hexa_donate_send_reciept( $name, $email, $amount, $reoccurance ) {
 	$frequency = "One Time";
-	if($reoccurance == 2) {
+	
+	if ($reoccurance == HEXA_DONATION_REOCCURANCE_MONTHLY) {
 		$frequency = "Monthly";
-	} else if($reoccurance == 12) {
+	} else if ($reoccurance == HEXA_DONATION_REOCCURANCE_SEMESTERLY) {
 		$frequency == "Each Semester";
 	}
+
 	$headers = 'From: editor@badgerherald.com' . "\r\n" .
     'Reply-To: editor@badgerherald.com' . "\r\n" .
 	'X-Mailer: PHP/' . phpversion();
@@ -173,7 +189,6 @@ function hexa_donate_save_donation_from_form( $email, $amount, $transaction_id, 
 
 	$contact_index = hexa_donate_save_contact_info( $user_id, $contact_info );
 	hexa_donation_save_charge( $user_id, $amount, $index, $transaction_id, $contact_index );
-
 }
 
 function hexa_donation_save_charge( $user_id, $amount, $reoccurance_index, $transaction_id, $contact_index ) {
