@@ -72,26 +72,27 @@ $gutterWidth: 20px;
 /***
  * Grid Mixins
  */
-@mixin breakpoint($breakpoint) {
+ @mixin breakpoint($breakpoint) {
+ 
   @if $breakpoint == "tablet" {
-    @media (min-width: pageWidth(6) + "px") {
+    @media (min-width: 760px) {
+      $aColor: pink !default;
       @content;
     }
   }
-  @else if $breakpoint == "tabletxl" {
-    @media (min-width: pageWidth(9) + "px") {
-      @content;
-    }
-  }
+ 
   @else if $breakpoint == "desktop" {
-    @media (min-width: pageWidth(12) + "px") {
+    @media (min-width: 1060px) {
+      $aColor: red;
       @content;
     }
   }
-  @else if $breakpoint == "xl" {
-    @media (min-width: pageWidth(15) + "px") {
-      @content;
-    }
-  }
-}
 
+  @else if $breakpoint == "xl" {
+    @media (min-width: 1220px) {
+      $aColor: red;
+      @content;
+    }
+  }
+
+}

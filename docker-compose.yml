@@ -1,0 +1,44 @@
+version: "3"
+
+services:
+  wordpress:
+    image: wordpress
+    container_name: donate-wordpress
+    links: 
+      - mariadb
+    ports:
+      - "8000:80"
+    restart: always
+    volumes:
+      - donate-wordpress:/var/www/html
+      - ./wp-content/themes:/var/www/html/wp-content/themes
+    environment:
+      WORDPRESS_DB_HOST: mariadb:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+
+  mariadb:
+    container_name: donate-mariadb
+    image: mariadb
+    volumes:
+      - donate-mariadb:/var/lib/mysql:rw
+    restart: always
+    command: mysqld --innodb-buffer-pool-size=128M
+    expose:
+      - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+
+volumes:
+  donate-mariadb:
+  donate-wordpress:
+
+networks:
+  default:
+    external:
+      name: stuff
+    

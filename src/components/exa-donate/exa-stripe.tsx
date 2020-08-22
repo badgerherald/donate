@@ -3,6 +3,7 @@ import { Component, State, h } from '@stencil/core';
 @Component({
   tag: 'exa-stripe',
   styleUrl: 'exa-stripe.scss',
+  shadow: true,
 })
 export class ExaStripe {
   @State() amount : number
