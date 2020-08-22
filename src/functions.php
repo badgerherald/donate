@@ -7,11 +7,13 @@ define( 'HEXA_DONATION_REOCCURANCE_ONCE', 0);
 define( 'HEXA_DONATION_REOCCURANCE_SEMESTERLY', 2);
 define( 'HEXA_DONATION_REOCCURANCE_MONTHLY', 12);
 
+define( "BHRLD_DONATION_FORM_NONCE_ACTION", 'donation-form-action');
+
 /**
  * Add stripe when the donate form is used.
  */
 function bhrld_donation_form( $atts ) {
-	return "<bhrld-donation-form></bhrld-donation-form>";
+	return '<bhrld-donation-form class="shadow" pk="' . STRIPE_PUBLISHABLE_KEY . '" no="' . wp_create_nonce( BHRLD_DONATION_FORM_NONCE_ACTION ) . '"></bhrld-donation-form>';
 }
 add_shortcode( 'badgerherald_donation_form', 'bhrld_donation_form' );
 
@@ -19,19 +21,19 @@ add_shortcode( 'badgerherald_donation_form', 'bhrld_donation_form' );
  * Enqueue hexa scripts and styles.
  */
 function hrld_donate_enqueue() {
-    wp_enqueue_script('', 'https://js.stripe.com/v3/',null,null,false);
+    wp_enqueue_script( '', 'https://js.stripe.com/v3/', null, null, false );
 }
-add_action('wp_enqueue_scripts', 'hrld_donate_enqueue');
+add_action( 'wp_enqueue_scripts', 'hrld_donate_enqueue' );
 
 /**
  * Entrypoint of process-donation route
  */
 function hexa_process_donation( WP_REST_Request $request ) {
-    $amount = $request->get_param( 'amount' );
-    $token = $request->get_param( 'token' );
+   $amount = $request->get_param( 'amount' );
+   $token = $request->get_param( 'token' );
 	$nonce = $request->get_param( 'nonce' );
 
-	// todo, nonce check
+	wp_verify_nonce( $nonce, BHRLD_DONATION_FORM_NONCE_ACTION );
 
 	$anonymous = $request->get_param( 'anonymous' );
 	$comment = $request->get_param( 'comment' );
@@ -117,22 +119,26 @@ function hexa_process_donation( WP_REST_Request $request ) {
 		//echo 'Message is:' . $e->getError()->message . '\n';
 	  } catch (\Stripe\Exception\RateLimitException $e) {
 		// Too many requests made to the API too quickly
-		$error = "Something wen't wrong 1";
+		bhrld_send_admin_error_email("RateLimitException", $e);
+		$error = "Something wen't wrong. Administrators have been notified";
 	  } catch (\Stripe\Exception\InvalidRequestException $e) {
 		// Invalid parameters were supplied to Stripe's API
+		bhrld_send_admin_error_email("InvalidRequestException", $e);
 		$error = $e->getError()->message;
 	  } catch (\Stripe\Exception\AuthenticationException $e) {
 		// Authentication with Stripe's API failed
 		// (maybe you changed API keys recently)
-		$error = "Something went wrong 2";
+		bhrld_send_admin_error_email("AuthenticationException", $e);
+		$error = "Something went wrong. Administrators have been notified";
 	  } catch (\Stripe\Exception\ApiConnectionException $e) {
 		// Network communication with Stripe failed
-
-		$error = print_r($e,true);
+		bhrld_send_admin_error_email("ApiConnectionException", $e);
+		$error = "Something went wrong. Administrators have been notified";
 	  } catch (\Stripe\Exception\ApiErrorException $e) {
 		// Display a very generic error to the user, and maybe send
 		// yourself an email
-		$error = "Something went wrong 4";
+		bhrld_send_admin_error_email("ApiErrorException", $e);
+		$error = "Something went wrong. Administrators have been notified";
 	  } catch (Exception $e) {
 		// Something else happened, completely unrelated to Stripe
 	  }
@@ -179,7 +185,21 @@ function hexa_donate_send_reciept( $name, $email, $amount, $reoccurance ) {
 	wp_mail( $email, "Thank you for your donation to The Badger Herald!", $message, $headers, null );
 }
 
-function hexa_donate_save_donation_from_form( $email, $amount, $transaction_id, $frequency, $contact_info ) {
+function bhrld_send_admin_error_email($subject, $error) {
+
+	return; // todo, test.
+
+	$headers = 'From: <email>' . "\r\n" .
+   'Reply-To: <email>' . "\r\n" .
+	'X-Mailer: PHP/' . phpversion();
+	
+	$message = "The following error occurred:" . "\r\n". "\r\n";
+	$message .= print_r($error,true);
+
+	wp_mail( "<email>" , $subject, $message, $headers, null );
+}
+
+function hexa_donate_save_donation_from_form( $email, $amount, $transaction_id, $frequency, array $contact_info ) {
 	$user_id = username_exists( $email );
 
 	if ( !$user_id and email_exists($user_email) == false ) {
@@ -211,6 +231,11 @@ function hexa_donate_save_contact_info( $user_id, $contact_info ) {
 	$key = 'hexa_donation_contact_info';
 
 	$contact = get_user_meta( $user_id, $key, true );
+	
+	if( !$contact ) {
+		$contact = array();
+	}
+
 	$contact[] = $contact_info;
 
 	update_user_meta( $user_id, $key, $contact );

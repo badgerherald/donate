@@ -1,0 +1,7 @@
+{
+	"semi": false,
+	"jsxBracketSameLine": true,
+	"useTabs": true,
+	"printwidth": 90,
+	"htmlWhitespaceSensitivity": "strict"
+}

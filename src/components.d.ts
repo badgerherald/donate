@@ -7,12 +7,16 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface BhrldDonationForm {
+        "no": string;
+        "pk": string;
     }
     interface ExaDonateAmount {
         "reoccuring": number;
     }
     interface ExaDonateCheckout {
         "amount": number;
+        "n": String;
+        "pk": string;
         "reoccuring": number;
         "serverError": any;
     }
@@ -64,6 +68,8 @@ declare global {
 }
 declare namespace LocalJSX {
     interface BhrldDonationForm {
+        "no"?: string;
+        "pk"?: string;
     }
     interface ExaDonateAmount {
         "onAmountChanged"?: (event: CustomEvent<number>) => void;
@@ -72,8 +78,10 @@ declare namespace LocalJSX {
     }
     interface ExaDonateCheckout {
         "amount"?: number;
+        "n"?: String;
         "onChangeAmount"?: (event: CustomEvent<any>) => void;
         "onCheckoutFinished"?: (event: CustomEvent<any>) => void;
+        "pk"?: string;
         "reoccuring"?: number;
         "serverError"?: any;
     }

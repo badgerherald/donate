@@ -16,3 +16,8 @@ Steps:
 5. Follow the steps to install a fresh WordPress site (use any name, user, password)
 6. Enable the WordPress theme donate-test
 
+
+### Troubleshooting
+
+Fixing DNS issues with Docker:
+https://development.robinwinslow.uk/2016/06/23/fix-docker-networking-dns/#the-permanent-system-wide-fix
