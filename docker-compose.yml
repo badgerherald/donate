@@ -4,7 +4,7 @@ services:
   wordpress:
     image: wordpress
     container_name: donate-wordpress
-    links: 
+    links:
       - mariadb
     ports:
       - "8000:80"
@@ -17,11 +17,14 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
-      WORDPRESS_CONFIG_EXTRA: | 
+      WORDPRESS_CONFIG_EXTRA: |
         define('STRIPE_PUBLISHABLE_KEY', '${STRIPE_PUBLISHABLE_KEY}');
         define('STRIPE_SECRET_KEY', '${STRIPE_SECRET_KEY}');
         define('STRIPE_MONTHLY_PLAN', '${STRIPE_MONTHLY_PLAN}');
         define('STRIPE_SEMESTERLY_PLAN', '${STRIPE_SEMESTERLY_PLAN}');
+        define('BHRLD_WEBMASTER_EMAIL', '${BHRLD_WEBMASTER_EMAIL}');
+        define('BHRLD_SENDFROM_EMAIL', '${BHRLD_SENDFROM_EMAIL}');
+        define('BHRLD_REPLYTO_EMAIL', '${BHRLD_REPLYTO_EMAIL}');
 
   mariadb:
     container_name: donate-mariadb
@@ -46,4 +49,3 @@ networks:
   default:
     external:
       name: stuff
-    

@@ -29,16 +29,7 @@ export class ExaDonateCheckout {
 	private firstNameField
 	private lastNameField
 	private emailField
-	private phoneField
 	private commentField
-	private anonymousField
-
-	private streetField
-	private aptField
-	private yearField
-	private cityField
-	private stateField
-	private zipField
 
 	componentWillLoad() {
 		this.stripe = Stripe(this.pk)
@@ -48,23 +39,6 @@ export class ExaDonateCheckout {
 	componentDidRender() {
 		this.stripeCard.mount(this.cardRef)
 		this.stripeCard.update({})
-	}
-
-	yearChanged() {
-		if (!this.yearField.value) {
-			this.streetField.placeholder = "152 W Johnson St"
-			return
-		}
-
-		if (this.yearField.value < 1978) {
-			this.streetField.placeholder = "638 State St."
-		} else if (this.yearField.value < 1998) {
-			this.streetField.placeholder = "550 State St."
-		} else if (this.yearField.value < 2014) {
-			this.streetField.placeholder = "326 W. Gorham St."
-		} else {
-			this.streetField.placeholder = "152 W. Johnson St."
-		}
 	}
 
 	async submit(event) {
@@ -111,19 +85,13 @@ export class ExaDonateCheckout {
 			},
 			body: JSON.stringify({
 				amount: this.amount,
+				first: this.firstNameField.value,
+				last: this.lastNameField.value,
 				reoccurance: this.reoccuring,
 				token: token.id,
 				nonce: this.n,
 				email: this.emailField.value,
-				anonymous: this.anonymousField.checked,
-				phone: this.phoneField.value,
-				year: this.yearField.value,
 				comment: this.commentField.value,
-				street: this.streetField.value,
-				apt: this.aptField.value,
-				city: this.cityField.value,
-				country: this.stateField.value,
-				zip: this.zipField.value,
 			}),
 		})
 			.then((response) => response.json())
@@ -219,7 +187,7 @@ export class ExaDonateCheckout {
 						<label>First Name *</label>
 						<input
 							required={true}
-							name="first-name"
+							name="first"
 							type="text"
 							placeholder="Carl (required)"
 							ref={(ref) => (this.firstNameField = ref)}
@@ -229,7 +197,7 @@ export class ExaDonateCheckout {
 						<label>Last Name *</label>
 						<input
 							required={true}
-							name="last-name"
+							name="last"
 							type="text"
 							placeholder="Golden (required)"
 							ref={(ref) => (this.lastNameField = ref)}
@@ -245,96 +213,12 @@ export class ExaDonateCheckout {
 							ref={(ref) => (this.emailField = ref)}
 						/>
 					</span>
-					<span>
-						<label>Phone # *</label>
-						<input
-							required={true}
-							name="phone"
-							type="text"
-							placeholder="608-257-4809 (required)"
-							ref={(ref) => (this.phoneField = ref)}
-						/>
-					</span>
-					<span class="col2">
-						<label>Graduated *</label>
-						<input
-							required={true}
-							name="final-year"
-							type="text"
-							placeholder="1969 (required)"
-							onChange={(_) => this.yearChanged()}
-							ref={(ref) => (this.yearField = ref)}
-						/>
-					</span>
-					<span class="col4">
+					<span class="col6">
 						<label>Comment</label>
 						<input
 							name="comment"
 							type="text"
 							ref={(ref) => (this.commentField = ref)}
-						/>
-					</span>
-					<span class="col2">
-						<input
-							class="anon-check"
-							name="anonymous"
-							type="checkbox"
-							ref={(ref) => (this.anonymousField = ref)}
-						/>
-						<label class="anon-label">Keep Anonymous</label>
-					</span>
-					<div class="clearfix"></div>
-				</div>
-
-				<div class="form-section">
-					<h4>Mailing Address</h4>
-					<span class="col4">
-						<label>Street *</label>
-						<input
-							required={true}
-							name="street"
-							type="text"
-							placeholder="152 W. Johnson St."
-							ref={(ref) => (this.streetField = ref)}
-						/>
-					</span>
-					<span class="col2">
-						<label>Apt/No</label>
-						<input
-							name="unit"
-							type="text"
-							placeholder="201"
-							ref={(ref) => (this.aptField = ref)}
-						/>
-					</span>
-					<span class="col2">
-						<label>City *</label>
-						<input
-							required={true}
-							name="city"
-							type="text"
-							placeholder="Madison"
-							ref={(ref) => (this.cityField = ref)}
-						/>
-					</span>
-					<span class="col2">
-						<label>State *</label>
-						<input
-							required={true}
-							name="state"
-							type="text"
-							placeholder="Wi"
-							ref={(ref) => (this.stateField = ref)}
-						/>
-					</span>
-					<span class="col2">
-						<label>Zip *</label>
-						<input
-							required={true}
-							name="zip"
-							type="text"
-							placeholder="53706"
-							ref={(ref) => (this.zipField = ref)}
 						/>
 					</span>
 					<div class="clearfix"></div>

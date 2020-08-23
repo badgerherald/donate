@@ -34,8 +34,9 @@ exa-donate-checkout {
 		}
 	}
 	.amount-banner {
-		//background: $grey;
-		text-align: center;
+		margin: 0 gutter();
+		background: $grey;
+		text-align: left;
 		padding: 36px 0;
 		color: black;
 		font-family: "pt sans";
