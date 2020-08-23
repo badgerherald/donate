@@ -9,6 +9,8 @@ export namespace Components {
     interface BhrldDonationForm {
         "no": string;
         "pk": string;
+        "subhead": string;
+        "title": string;
     }
     interface ExaDonateAmount {
         "reoccuring": number;
@@ -19,12 +21,6 @@ export namespace Components {
         "pk": string;
         "reoccuring": number;
         "serverError": any;
-    }
-    interface ExaDonateNav {
-        "amount": number;
-        "isCheckout": boolean;
-    }
-    interface ExaDonateSpinner {
     }
 }
 declare global {
@@ -46,30 +42,18 @@ declare global {
         prototype: HTMLExaDonateCheckoutElement;
         new (): HTMLExaDonateCheckoutElement;
     };
-    interface HTMLExaDonateNavElement extends Components.ExaDonateNav, HTMLStencilElement {
-    }
-    var HTMLExaDonateNavElement: {
-        prototype: HTMLExaDonateNavElement;
-        new (): HTMLExaDonateNavElement;
-    };
-    interface HTMLExaDonateSpinnerElement extends Components.ExaDonateSpinner, HTMLStencilElement {
-    }
-    var HTMLExaDonateSpinnerElement: {
-        prototype: HTMLExaDonateSpinnerElement;
-        new (): HTMLExaDonateSpinnerElement;
-    };
     interface HTMLElementTagNameMap {
         "bhrld-donation-form": HTMLBhrldDonationFormElement;
         "exa-donate-amount": HTMLExaDonateAmountElement;
         "exa-donate-checkout": HTMLExaDonateCheckoutElement;
-        "exa-donate-nav": HTMLExaDonateNavElement;
-        "exa-donate-spinner": HTMLExaDonateSpinnerElement;
     }
 }
 declare namespace LocalJSX {
     interface BhrldDonationForm {
         "no"?: string;
         "pk"?: string;
+        "subhead"?: string;
+        "title"?: string;
     }
     interface ExaDonateAmount {
         "onAmountChanged"?: (event: CustomEvent<number>) => void;
@@ -85,18 +69,10 @@ declare namespace LocalJSX {
         "reoccuring"?: number;
         "serverError"?: any;
     }
-    interface ExaDonateNav {
-        "amount"?: number;
-        "isCheckout"?: boolean;
-    }
-    interface ExaDonateSpinner {
-    }
     interface IntrinsicElements {
         "bhrld-donation-form": BhrldDonationForm;
         "exa-donate-amount": ExaDonateAmount;
         "exa-donate-checkout": ExaDonateCheckout;
-        "exa-donate-nav": ExaDonateNav;
-        "exa-donate-spinner": ExaDonateSpinner;
     }
 }
 export { LocalJSX as JSX };
@@ -106,8 +82,6 @@ declare module "@stencil/core" {
             "bhrld-donation-form": LocalJSX.BhrldDonationForm & JSXBase.HTMLAttributes<HTMLBhrldDonationFormElement>;
             "exa-donate-amount": LocalJSX.ExaDonateAmount & JSXBase.HTMLAttributes<HTMLExaDonateAmountElement>;
             "exa-donate-checkout": LocalJSX.ExaDonateCheckout & JSXBase.HTMLAttributes<HTMLExaDonateCheckoutElement>;
-            "exa-donate-nav": LocalJSX.ExaDonateNav & JSXBase.HTMLAttributes<HTMLExaDonateNavElement>;
-            "exa-donate-spinner": LocalJSX.ExaDonateSpinner & JSXBase.HTMLAttributes<HTMLExaDonateSpinnerElement>;
         }
     }
 }

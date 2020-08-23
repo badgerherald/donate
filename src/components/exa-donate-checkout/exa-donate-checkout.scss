@@ -18,8 +18,18 @@ exa-donate-checkout {
 		margin-bottom: 20px;
 		text-align: center;
 		h3 {
-			font-size: 2em;
+			font-size: 2.2em;
 			font-family: "pt sans";
+			margin-bottom: 12px;
+		}
+		p {
+			max-width: 80%;
+			margin: 0 auto;
+			line-height: 28px;
+		}
+		a {
+			font-family: $headline;
+			font-weight: bold;
 		}
 	}
 	.edit {
@@ -27,6 +37,7 @@ exa-donate-checkout {
 		margin-top: 12px;
 		display: inline-block;
 		padding: 6px;
+		font-weight: bold;
 		&:hover {
 			background: $lightgrey;
 			border-radius: 4px;
@@ -34,9 +45,9 @@ exa-donate-checkout {
 		}
 	}
 	.amount-banner {
+		position: relative;
 		margin: 0 gutter();
-		background: $grey;
-		text-align: left;
+		text-align: center;
 		padding: 36px 0;
 		color: black;
 		font-family: "pt sans";
@@ -95,6 +106,7 @@ exa-donate-checkout {
 				&.stripe {
 					padding: 12px 6px;
 					font-family: arial;
+					font-size: 15px;
 					border-radius: 3px;
 					border: 1px solid $greyBorder;
 					display: inline-block;
@@ -126,9 +138,9 @@ exa-donate-checkout {
 				width: col(3);
 			}
 			& > h4 {
-				margin: 6px gutter() 0;
+				margin: 12px gutter() 0;
 				border-top: 1px solid $grey;
-				padding: 6px 0 24px;
+				padding: 12px 0 24px;
 				font-size: 1.2em;
 				font-family: "pt sans", "pt sans narrow";
 			}

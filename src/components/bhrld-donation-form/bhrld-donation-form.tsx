@@ -11,6 +11,9 @@ export class HeraldDonationForm {
 	@Prop() pk: string
 	@Prop() no: string
 
+	@Prop() title: string
+	@Prop() subhead: string
+
 	private checkout
 	private kiosk
 
@@ -29,8 +32,8 @@ export class HeraldDonationForm {
 	renderHeader() {
 		return [
 			<div class="header">
-				<h3>Donate</h3>
-				<p>Support student journalism @ UW</p>
+				<h3>{this.title || "Donate"}</h3>
+				<p>{this.subhead || "Support the Herald Experiment"}</p>
 			</div>,
 			<span class="charm">💙📰</span>,
 		]
@@ -89,7 +92,6 @@ export class HeraldDonationForm {
 	}
 
 	render() {
-		console.log(this.no)
 		return (
 			<div class="donate-form">
 				{[

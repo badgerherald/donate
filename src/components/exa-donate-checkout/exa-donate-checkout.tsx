@@ -42,8 +42,6 @@ export class ExaDonateCheckout {
 	}
 
 	async submit(event) {
-		console.log("NONCE!", this.n)
-
 		event.preventDefault()
 
 		if (this.saving) {
@@ -51,15 +49,14 @@ export class ExaDonateCheckout {
 		}
 
 		this.saving = true
-
-		console.log(this.stripeCard)
 		const { token, error } = await this.stripe.createToken(this.stripeCard, {})
-		console.log(error)
 
 		if (error) {
 			// Inform the customer that there was an error.
 			const errorElement = document.getElementById("card-errors")
-			errorElement.textContent = error.message
+			if (errorElement) {
+				errorElement.textContent = error.message
+			}
 			this.saving = false
 			return
 		} else {
@@ -139,8 +136,8 @@ export class ExaDonateCheckout {
 				<div class="thank-you">
 					<h3>Thank you! 🎉</h3>{" "}
 					<p>
-						Thank you for your Donation to The Badger Herald. Please check your
-						email for a reciept. <br />
+						Thank you for your generous donation to The Badger Herald. Please
+						check your email for a reciept. <br />
 						<a class="edit" onClick={(_) => this.emitEditAmount()}>
 							Start Over
 						</a>
@@ -177,12 +174,12 @@ export class ExaDonateCheckout {
 				{details}
 				<br />
 				<a class="edit" onClick={(_) => this.emitEditAmount()}>
-					change
+					change amount
 				</a>
 			</div>,
 			<form ref={(r) => (this.form = r)} onSubmit={(e) => this.submit(e)}>
 				<div class="form-section">
-					<h4>Alumni Details</h4>
+					<h4>1. Contact Information</h4>
 					<span>
 						<label>First Name *</label>
 						<input
@@ -203,7 +200,7 @@ export class ExaDonateCheckout {
 							ref={(ref) => (this.lastNameField = ref)}
 						/>
 					</span>
-					<span>
+					<span class="col4">
 						<label>Email *</label>
 						<input
 							required={true}
@@ -213,7 +210,7 @@ export class ExaDonateCheckout {
 							ref={(ref) => (this.emailField = ref)}
 						/>
 					</span>
-					<span class="col6">
+					<span class="col4">
 						<label>Comment</label>
 						<input
 							name="comment"
@@ -225,7 +222,7 @@ export class ExaDonateCheckout {
 				</div>
 
 				<div class="form-section">
-					<h4>Payment</h4>
+					<h4>2. Payment</h4>
 					{this.serverError ? (
 						<div id="card-errors">{this.serverError}</div>
 					) : (
@@ -241,8 +238,8 @@ export class ExaDonateCheckout {
 							? "saving..."
 							: "Donate $" +
 							  this.amount +
-							  (this.reoccuring == 2 ? " each semester" : "") +
-							  (this.reoccuring == 12 ? " monthly" : "")
+							  (this.reoccuring == 2 ? " Each Semester" : "") +
+							  (this.reoccuring == 12 ? " Each Month" : "")
 					}
 					onMouseUp={(_) => this.runValidations()}
 				/>

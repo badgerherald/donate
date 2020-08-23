@@ -13,8 +13,11 @@ exa-donate-amount {
 	ul.reoccuring {
 		text-align: center;
 		margin-bottom: 15px;
+		margin-top: -18px;
 		li {
-			margin: 18px 0;
+			margin: 30px 0;
+			display: inline-block;
+			line-height: 30px;
 			a {
 				color: black;
 				padding: 10px;
@@ -31,7 +34,7 @@ exa-donate-amount {
 					height: 16px;
 					border-radius: 12px;
 					left: 10px;
-					top: 10px;
+					top: 12px;
 					position: absolute;
 					-webkit-box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.3);
 					-moz-box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.3);
@@ -72,6 +75,12 @@ exa-donate-amount {
 			width: col(1);
 			text-align: center;
 			position: relative;
+			&:nth-child(2n) {
+				margin-right: gutter();
+			}
+			&:nth-child(3n) {
+				margin-right: 0;
+			}
 			input[type="number"]::-webkit-inner-spin-button,
 			input[type="number"]::-webkit-outer-spin-button {
 				-webkit-appearance: none;
@@ -168,23 +177,17 @@ exa-donate-amount {
 @include breakpoint("tablet") {
 	exa-donate-amount {
 		ul.reoccuring {
+			margin-top: 12px;
 			li {
-				margin: 0;
-				display: inline;
+				margin: 12px 6px;
+				display: inline-block;
 			}
 		}
 	}
 	.donate-form {
-		//width: col(6);
 		ul {
 			li.suggestion {
 				width: col(2);
-				&:nth-child(2n) {
-					margin-right: gutter();
-				}
-				&:nth-child(3n) {
-					margin-right: 0;
-				}
 			}
 		}
 	}

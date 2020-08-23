@@ -4,11 +4,11 @@ exa-donate {
 	display: block;
 }
 
-.donate-form * {
+.donate-form {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	font-size: 15px;
+	font-size: 18px;
 }
 
 .donate-form {
@@ -23,22 +23,24 @@ exa-donate {
 		display: inline-block;
 		width: col(3);
 		h3 {
-			font-size: 28px;
+			font-size: 36px;
 			font-family: $headline;
 			margin: 12px 0;
 		}
 		p {
+			font-family: $headline;
 			margin: 12px 0;
 		}
 	}
 	.charm {
 		position: absolute;
 		top: 24px;
+		font-size: 60px;
 		right: gutter();
 		font-size: 2em;
 	}
 	.disclaimer {
-		margin: 15px gutter() 24px;
+		margin: 36px gutter() 24px;
 		color: grey;
 	}
 	.disclaimer a {

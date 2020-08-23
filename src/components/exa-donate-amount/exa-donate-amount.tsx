@@ -82,7 +82,7 @@ export class ExaDonateAmount {
 						}>
 						<input
 							type="number"
-							value={this.isCustomAmount ? this.amount : ""}
+							value={this.isCustomAmount ? this.amount : undefined}
 							placeholder="1969"
 							onFocus={(_) => {
 								this.isTyping = true

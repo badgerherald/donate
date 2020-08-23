@@ -12,12 +12,19 @@
 
   <style>
     * {
-      margin: 0;
+      margin: 0px;
       padding: 0;
     }
     body {
-      margin: 60px 100px;
+      margin: 20px 20px;
       background: #eff4f6;
+    }
+
+    
+    @media (min-width: 600px) {
+      body {
+        margin: 40px 100px;
+      }
     }
   </style>
 
