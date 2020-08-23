@@ -7,10 +7,10 @@
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
     interface BhrldDonationForm {
+        "formTitle": string;
         "no": string;
         "pk": string;
         "subhead": string;
-        "title": string;
     }
     interface ExaDonateAmount {
         "reoccuring": number;
@@ -50,10 +50,10 @@ declare global {
 }
 declare namespace LocalJSX {
     interface BhrldDonationForm {
+        "formTitle"?: string;
         "no"?: string;
         "pk"?: string;
         "subhead"?: string;
-        "title"?: string;
     }
     interface ExaDonateAmount {
         "onAmountChanged"?: (event: CustomEvent<number>) => void;

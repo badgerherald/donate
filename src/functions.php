@@ -243,7 +243,7 @@ function bhrld_donate_process_donation_entry( WP_REST_Request $request ) {
 // Shortcode
 function bhrld_donation_form( $atts ) {
 	return '<bhrld-donation-form class="shadow" 
-					title="' . $atts[title] . '"
+					formTitle="' . $atts[title] . '"
 					subhead="' . $atts[subhead] . '"
 					pk="' . STRIPE_PUBLISHABLE_KEY . '" 
 					no="' . wp_create_nonce( BHRLD_DONATION_FORM_NONCE_ACTION ) . '"></bhrld-donation-form>';

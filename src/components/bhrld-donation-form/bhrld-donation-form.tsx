@@ -11,7 +11,7 @@ export class HeraldDonationForm {
 	@Prop() pk: string
 	@Prop() no: string
 
-	@Prop() title: string
+	@Prop() formTitle: string
 	@Prop() subhead: string
 
 	private checkout
@@ -32,7 +32,7 @@ export class HeraldDonationForm {
 	renderHeader() {
 		return [
 			<div class="header">
-				<h3>{this.title || "Donate"}</h3>
+				<h3>{this.formTitle || "Donate"}</h3>
 				<p>{this.subhead || "Support the Herald Experiment"}</p>
 			</div>,
 			<span class="charm">💙📰</span>,
