@@ -199,7 +199,7 @@ function bhrld_donate_register_rest_route() {
 			'nonce' => array(
 				'required' => true,
 				'validate_callback' => function($param, $request, $key) {
-					wp_verify_nonce( $param, BHRLD_DONATION_FORM_NONCE_ACTION );
+					return 1 == wp_verify_nonce( $param, BHRLD_DONATION_FORM_NONCE_ACTION );
 				}
 			),
 			'token' => array(
@@ -233,7 +233,6 @@ function bhrld_donate_process_donation_entry( WP_REST_Request $request ) {
 
 	bhrld_donate_process_donation( $token, $name, $email, $amount, $commment, $reoccurance );
 }
-
 
 
 //
