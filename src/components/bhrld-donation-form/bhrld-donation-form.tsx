@@ -10,6 +10,7 @@ export class HeraldDonationForm {
 
 	@Prop() pk: string
 	@Prop() no: string
+	@Prop() rk: string
 
 	@Prop() formTitle: string
 	@Prop() subhead: string
@@ -82,6 +83,7 @@ export class HeraldDonationForm {
 			<exa-donate-checkout
 				pk={this.pk}
 				n={this.no}
+				rk={this.rk}
 				reoccuring={this.reoccuring}
 				amount={this.amount}
 				onChangeAmount={(_) => (this.isCheckout = false)}

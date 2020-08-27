@@ -10,6 +10,7 @@ export namespace Components {
         "formTitle": string;
         "no": string;
         "pk": string;
+        "rk": string;
         "subhead": string;
     }
     interface ExaDonateAmount {
@@ -17,9 +18,10 @@ export namespace Components {
     }
     interface ExaDonateCheckout {
         "amount": number;
-        "n": String;
+        "n": string;
         "pk": string;
         "reoccuring": number;
+        "rk": string;
         "serverError": any;
     }
 }
@@ -53,6 +55,7 @@ declare namespace LocalJSX {
         "formTitle"?: string;
         "no"?: string;
         "pk"?: string;
+        "rk"?: string;
         "subhead"?: string;
     }
     interface ExaDonateAmount {
@@ -62,11 +65,12 @@ declare namespace LocalJSX {
     }
     interface ExaDonateCheckout {
         "amount"?: number;
-        "n"?: String;
+        "n"?: string;
         "onChangeAmount"?: (event: CustomEvent<any>) => void;
         "onCheckoutFinished"?: (event: CustomEvent<any>) => void;
         "pk"?: string;
         "reoccuring"?: number;
+        "rk"?: string;
         "serverError"?: any;
     }
     interface IntrinsicElements {

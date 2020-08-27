@@ -7,7 +7,8 @@ declare const exa: any
 })
 export class ExaDonateCheckout {
 	@Prop() pk: string
-	@Prop() n: String
+	@Prop() n: string
+	@Prop() rk: string
 
 	@Prop() serverError
 	@Prop() amount: number = 0
@@ -41,12 +42,25 @@ export class ExaDonateCheckout {
 		this.stripeCard.update({})
 	}
 
+	async recaptcha(): Promise<string> {
+		return new Promise((res, rej) => {
+			grecaptcha.ready(() =>
+				grecaptcha.execute(this.rk, { action: "submit" }).then(
+					(token) => res(token),
+					(reason) => rej(reason)
+				)
+			)
+		})
+	}
+
 	async submit(event) {
 		event.preventDefault()
 
 		if (this.saving) {
 			return
 		}
+
+		let recaptcha = await this.recaptcha()
 
 		this.saving = true
 		const { token, error } = await this.stripe.createToken(this.stripeCard, {})
@@ -69,12 +83,12 @@ export class ExaDonateCheckout {
 			this.form.appendChild(hiddenInput)
 
 			// Submit the form
-			await this.processDonation(token)
+			await this.processDonation(token, recaptcha)
 		}
 	}
 
-	async processDonation(token) {
-		return fetch("/wp-json/hexa/v1/process-donation", {
+	async processDonation(token, recaptcha) {
+		return fetch("/wp-json/donate/v1/process-donation", {
 			method: "POST", // *GET, POST, PUT, DELETE, etc.
 			cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
 			headers: {
@@ -89,6 +103,7 @@ export class ExaDonateCheckout {
 				nonce: this.n,
 				email: this.emailField.value,
 				comment: this.commentField.value,
+				recaptcha: recaptcha,
 			}),
 		})
 			.then((response) => response.json())

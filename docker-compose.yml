@@ -25,11 +25,14 @@ services:
         define('BHRLD_WEBMASTER_EMAIL', '${BHRLD_WEBMASTER_EMAIL}');
         define('BHRLD_SENDFROM_EMAIL', '${BHRLD_SENDFROM_EMAIL}');
         define('BHRLD_REPLYTO_EMAIL', '${BHRLD_REPLYTO_EMAIL}');
+        define('RECAPTCHA_SITE_KEY', '${RECAPTCHA_SITE_KEY}');
+        define('RECAPTCHA_SECRET_KEY', '${RECAPTCHA_SECRET_KEY}');
 
   mariadb:
     container_name: donate-mariadb
     image: mariadb
     volumes:
+      - ./docker/mariadb/install/:/docker-entrypoint-initdb.d
       - donate-mariadb:/var/lib/mysql:rw
     restart: always
     command: mysqld --innodb-buffer-pool-size=512M

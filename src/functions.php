@@ -186,7 +186,7 @@ function bhrld_donate_send_webmaster_error_email($subject, $error) {
 //
 
 function bhrld_donate_register_rest_route() {
-	register_rest_route( 'hexa/v1', 'process-donation', array(
+	register_rest_route( 'donate/v1', 'process-donation', array(
 		'methods'  => 'POST',
 		'callback' => 'bhrld_donate_process_donation_entry',
 		'args' => array(
@@ -244,12 +244,14 @@ function bhrld_donation_form( $atts ) {
 	return '<bhrld-donation-form class="shadow" 
 					formTitle="' . $atts[title] . '"
 					subhead="' . $atts[subhead] . '"
+					rk="' . RECAPTCHA_SITE_KEY . '"
 					pk="' . STRIPE_PUBLISHABLE_KEY . '" 
 					no="' . wp_create_nonce( BHRLD_DONATION_FORM_NONCE_ACTION ) . '"></bhrld-donation-form>';
 }
 add_shortcode( 'badgerherald_donation_form', 'bhrld_donation_form' );
 
 function bhrld_donate_enqueue() {
-	wp_enqueue_script( '', 'https://js.stripe.com/v3/', null, null, false );
+	wp_enqueue_script( 'donate-stripe-js', 'https://js.stripe.com/v3/', null, null, false );
+	wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=' . RECAPTCHA_SITE_KEY , null, null, false );
 }
 add_action( 'wp_enqueue_scripts', 'bhrld_donate_enqueue' );
