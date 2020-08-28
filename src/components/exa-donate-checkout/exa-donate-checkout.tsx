@@ -83,7 +83,13 @@ export class ExaDonateCheckout {
 			this.form.appendChild(hiddenInput)
 
 			// Submit the form
-			await this.processDonation(token, recaptcha)
+			try {
+				await this.processDonation(token, recaptcha)
+			} catch (err) {
+				this.serverError =
+					"Something went wrong and we could not process your donation. Refreshing might help. Otherwise please reach out to publisher@badgerherald.com."
+				this.saving = false
+			}
 		}
 	}
 
@@ -106,7 +112,12 @@ export class ExaDonateCheckout {
 				recaptcha: recaptcha,
 			}),
 		})
-			.then((response) => response.json())
+			.then((response) => {
+				if (response.status === 400) {
+					throw "error"
+				}
+				return response.json()
+			})
 			.then((json) => {
 				if (json.success) {
 					this.done = true
@@ -114,7 +125,7 @@ export class ExaDonateCheckout {
 					this.serverError = json.error
 					this.saving = false
 				}
-			}) // parses JSON response into native JavaScript objects
+			})
 	}
 
 	validate(): boolean {

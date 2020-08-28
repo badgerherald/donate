@@ -1,5 +1,9 @@
 @import "../../assets/sass/foundations.scss";
 
+.grecaptcha-badge {
+	opacity: 0;
+}
+
 exa-donate {
 	display: block;
 }
@@ -46,6 +50,10 @@ exa-donate {
 	.disclaimer a {
 		color: grey;
 		text-decoration: underline;
+	}
+	p {
+		margin-bottom: 12px;
+		font-size: 0.8em;
 	}
 }
 

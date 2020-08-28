@@ -26,7 +26,7 @@ function bhrld_donate_process_donation( $token, $name, $email, $amount, $commmen
 		} else {
 			$subscription = bhrld_get_stripe_subscription_object( $customerID, $amountInCents, $comment, $reoccurance);
 			\Stripe\Subscription::create( $subscription );
-		} 
+		}
 
 	} catch(\Stripe\Exception\CardException $e) {
 		$error = $e->getError()->message;
@@ -116,17 +116,17 @@ function bhrld_get_stripe_subscription_object( $customerID, $amountInCents, $com
 	$baseCharge = bhrld_get_stripe_base_charge_object( $customerID, $comment );
 	$subscription = [
 		"items" => [
-		  [
-			"price_data" => [
-				"currency" => "USD",
-				"product" => $product,
-				"recurring" => [
-					"interval_count" => $interval,
-					"interval" => "month"
-				],
-				"unit_amount" => $amountInCents
-			]
-		  ],
+			[
+				"price_data" => [
+					"currency" => "USD",
+					"product" => $product,
+					"recurring" => [
+						"interval_count" => $interval,
+						"interval" => "month"
+					],
+					"unit_amount" => $amountInCents
+				]
+			],
 		]
 	];
 
@@ -204,6 +204,19 @@ function bhrld_donate_register_rest_route() {
 			),
 			'token' => array(
 				'required' => true,
+			),
+			'recaptcha' => array(
+				'required' => true,
+				'validate_callback' => function($param, $request, $key) {
+					$recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
+					$recaptcha_secret = RECAPTCHA_SECRET_KEY;
+					$recaptcha_response = $param;
+					
+					$recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
+					$recaptcha = json_decode($recaptcha);
+					
+					return $recaptcha->score >= 0.5;
+				}
 			),
 			'reoccurance' => array(
 				'required' => true,
