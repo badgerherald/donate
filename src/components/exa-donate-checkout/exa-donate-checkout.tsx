@@ -25,7 +25,9 @@ export class ExaDonateCheckout {
 	private stripe
 
 	private cardRef
+	private buttonRef
 	private stripeCard
+	private stripeButton
 	private form
 
 	private firstNameField
@@ -33,14 +35,36 @@ export class ExaDonateCheckout {
 	private emailField
 	private commentField
 
+	private paymentRequest
+
 	componentWillLoad() {
 		this.stripe = Stripe(this.pk)
 		this.stripeCard = this.stripe.elements().create("card")
+
+		this.paymentRequest = this.stripe.paymentRequest({
+			country: "US",
+			currency: "usd",
+			total: {
+				label: "Demo total",
+				amount: 1099,
+			},
+			requestPayerName: true,
+			requestPayerEmail: true,
+		})
+		this.stripeButton = this.stripe.elements().create("paymentRequestButton", {
+			paymentRequest: this.paymentRequest,
+		})
 	}
 
 	componentDidRender() {
 		this.stripeCard.mount(this.cardRef)
 		this.stripeCard.update({})
+		this.paymentRequest.canMakePayment().then((res) => {
+			if (res) {
+				this.stripeButton.mount(this.buttonRef)
+			} else {
+			}
+		})
 	}
 
 	async recaptcha(): Promise<string> {
@@ -257,6 +281,7 @@ export class ExaDonateCheckout {
 						""
 					)}
 					<span class="stripe" ref={(ref) => (this.cardRef = ref)} />
+					<span class="button-pay" ref={(ref) => (this.buttonRef = ref)} />
 					<div class="clearfix"></div>
 				</div>
 				<input
