@@ -8,9 +8,11 @@ export class HeraldDonationForm {
 	@State() amount: number
 	@State() isCheckout: Boolean
 
+	/// public API keys & nonce tokens
 	@Prop() pk: string
 	@Prop() no: string
 	@Prop() rk: string
+	@Prop() ht: string
 
 	@Prop() formTitle: string
 	@Prop() subhead: string
@@ -90,6 +92,7 @@ export class HeraldDonationForm {
 				pk={this.pk}
 				n={this.no}
 				rk={this.rk}
+				ht={this.ht}
 				reoccuring={this.reoccuring}
 				amount={this.amount}
 				onChangeAmount={(_) => (this.isCheckout = false)}

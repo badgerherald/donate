@@ -259,7 +259,9 @@ function bhrld_donation_form( $atts ) {
 					subhead="' . $atts[subhead] . '"
 					rk="' . RECAPTCHA_SITE_KEY . '"
 					pk="' . STRIPE_PUBLISHABLE_KEY . '" 
-					no="' . wp_create_nonce( BHRLD_DONATION_FORM_NONCE_ACTION ) . '"></bhrld-donation-form>';
+					no="' . wp_create_nonce( BHRLD_DONATION_FORM_NONCE_ACTION ) . '"
+					ht="' . wp_create_nonce( 'wp_rest' ). '"
+					></bhrld-donation-form>';
 }
 add_shortcode( 'badgerherald_donation_form', 'bhrld_donation_form' );
 

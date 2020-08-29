@@ -9,6 +9,7 @@ export class ExaDonateCheckout {
 	@Prop() pk: string
 	@Prop() n: string
 	@Prop() rk: string
+	@Prop() ht: string
 
 	@Prop() serverError
 	@Prop() amount: number = 0
@@ -99,6 +100,7 @@ export class ExaDonateCheckout {
 			cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
 			headers: {
 				"Content-Type": "application/json",
+				"X-WP-Nonce": this.ht,
 			},
 			body: JSON.stringify({
 				amount: this.amount,
