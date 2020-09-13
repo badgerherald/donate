@@ -28,7 +28,7 @@ exa-donate {
 		margin: 15px gutter() 24px;
 		border-bottom: 1px solid $grey;
 		display: inline-block;
-		width: col(6);
+		width: col(3);
 		@include breakpoint("mobilexl") {
 			width: col(6);
 		}
