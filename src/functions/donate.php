@@ -1,6 +1,6 @@
 <?php
 
-require_once('lib/stripe-php-7.49.0/init.php');
+require_once('donate/lib/stripe-php-7.49.0/init.php');
 \Stripe\Stripe::setApiKey(STRIPE_SECRET_KEY);
 
 define( 'BHRLD_DONATION_REOCCURANCE_ONCE', 0);

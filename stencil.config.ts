@@ -7,19 +7,14 @@ export const config: Config = {
 		{
 			type: "dist",
 			esmLoaderPath: "../loader",
-			copy: [
-				{ src: "lib/**/*" },
-				{ src: "lib/**/*.php" },
-				{ src: "functions.php" },
-			],
+			copy: [{ src: "functions" }],
 		},
 		{
 			type: "www",
 			buildDir: "app",
 			dir: "wp-content/themes/donate-test/",
 			copy: [
-				{ src: "lib/**/*" },
-				{ src: "functions.php" },
+				{ src: "functions", dest: "etc/" },
 				{ src: "index.php" },
 				{ src: "style.css" },
 			],
