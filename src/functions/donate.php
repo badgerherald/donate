@@ -254,10 +254,19 @@ function bhrld_donate_process_donation_entry( WP_REST_Request $request ) {
 
 // Shortcode
 function bhrld_donation_form( $atts ) {
+	$atts = shortcode_atts( array(
+        'title' => 'Donate',
+        'subhead' => 'Support the Herald!'
+    ), $atts, 'badgerherald_donation_form' );
+
+	wp_enqueue_script( 'donate-stripe-js' );
+	wp_enqueue_script( 'google-recaptcha' );
+
+	
 	return apply_filters( 'bhrld_donate_form_shortcode', 
 								'<bhrld-donation-form class="shadow" 
-									formTitle="' . $atts[title] . '"
-									subhead="' . $atts[subhead] . '"
+									formTitle="' . $atts["title"] . '"
+									subhead="' . $atts["subhead"] . '"
 									rk="' . RECAPTCHA_SITE_KEY . '"
 									pk="' . STRIPE_PUBLISHABLE_KEY . '" 
 									no="' . wp_create_nonce( BHRLD_DONATION_FORM_NONCE_ACTION ) . '"
@@ -267,7 +276,7 @@ function bhrld_donation_form( $atts ) {
 add_shortcode( 'badgerherald_donation_form', 'bhrld_donation_form' );
 
 function bhrld_donate_enqueue() {
-	wp_enqueue_script( 'donate-stripe-js', 'https://js.stripe.com/v3/', null, null, false );
-	wp_enqueue_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=' . RECAPTCHA_SITE_KEY , null, null, false );
+	wp_register_script( 'donate-stripe-js', 'https://js.stripe.com/v3/', null, null, true );
+	wp_register_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=' . RECAPTCHA_SITE_KEY , null, null, true );
 }
 add_action( 'wp_enqueue_scripts', 'bhrld_donate_enqueue' );
