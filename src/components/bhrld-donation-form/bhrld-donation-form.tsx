@@ -10,9 +10,7 @@ export class HeraldDonationForm {
 
 	/// public API keys & nonce tokens
 	@Prop() pk: string
-	@Prop() no: string
 	@Prop() rk: string
-	@Prop() ht: string
 
 	@Prop() formTitle: string
 	@Prop() subhead: string
@@ -90,9 +88,7 @@ export class HeraldDonationForm {
 		this.checkout = (
 			<exa-donate-checkout
 				pk={this.pk}
-				n={this.no}
 				rk={this.rk}
-				ht={this.ht}
 				reoccuring={this.reoccuring}
 				amount={this.amount}
 				onChangeAmount={(_) => (this.isCheckout = false)}

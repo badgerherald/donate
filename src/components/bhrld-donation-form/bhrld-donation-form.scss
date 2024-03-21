@@ -39,7 +39,7 @@ exa-donate {
 		}
 		p {
 			font-family: $headline;
-			margin: 12px 0;
+			margin: 6px 0;
 		}
 	}
 	.charm {
@@ -51,14 +51,16 @@ exa-donate {
 	}
 	.disclaimer {
 		margin: 36px gutter() 24px;
+		line-height: 18px;
 		color: grey;
 	}
 	.disclaimer a {
 		color: grey;
 		text-decoration: underline;
 	}
-	p {
+	.disclaimer p {
 		margin-bottom: 12px;
 		font-size: 0.8em;
+		line-height: 18px;
 	}
 }

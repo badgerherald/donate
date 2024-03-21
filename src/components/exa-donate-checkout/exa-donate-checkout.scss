@@ -95,6 +95,7 @@ exa-donate-checkout {
 		.form-section {
 			margin-top: 18px;
 			margin-bottom: 26px;
+			clear: both;
 			& > span {
 				float: left;
 				width: col(3);
@@ -158,6 +159,7 @@ exa-donate-checkout {
 			padding: 15px 40px;
 			margin: 24px auto;
 			display: block;
+			margin-top: 60px;
 			&[value="saving..."] {
 				opacity: 0.5;
 			}

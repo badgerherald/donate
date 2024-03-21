@@ -1,16 +1,14 @@
 import { Component, h, State, Prop, Event, EventEmitter } from "@stencil/core"
 
-declare const exa: any
+declare const donate: any
+
 @Component({
 	tag: "exa-donate-checkout",
 	styleUrl: "exa-donate-checkout.scss",
 })
 export class ExaDonateCheckout {
 	@Prop() pk: string
-	@Prop() n: string
 	@Prop() rk: string
-	@Prop() ht: string
-
 	@Prop() serverError
 	@Prop() amount: number = 0
 	@Prop() reoccuring: number
@@ -100,7 +98,7 @@ export class ExaDonateCheckout {
 			cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
 			headers: {
 				"Content-Type": "application/json",
-				"X-WP-Nonce": this.ht,
+				"X-WP-Nonce": donate.ht,
 			},
 			body: JSON.stringify({
 				amount: this.amount,
@@ -108,7 +106,7 @@ export class ExaDonateCheckout {
 				last: this.lastNameField.value,
 				reoccurance: this.reoccuring,
 				token: token.id,
-				nonce: this.n,
+				nonce: donate.no,
 				email: this.emailField.value,
 				comment: this.commentField.value,
 				recaptcha: recaptcha,
@@ -248,7 +246,7 @@ export class ExaDonateCheckout {
 					</span>
 					<div class="clearfix"></div>
 				</div>
-
+				<br />
 				<div class="form-section">
 					<h4>2. Payment</h4>
 					{this.serverError ? (

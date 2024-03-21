@@ -3,32 +3,32 @@
 require_once('donate/lib/stripe-php-7.49.0/init.php');
 \Stripe\Stripe::setApiKey(STRIPE_SECRET_KEY);
 
-define( 'BHRLD_DONATION_REOCCURANCE_ONCE', 0);
-define( 'BHRLD_DONATION_REOCCURANCE_SEMESTERLY', 2);
-define( 'BHRLD_DONATION_REOCCURANCE_MONTHLY', 12);
-define( "BHRLD_DONATION_FORM_NONCE_ACTION", 'donation-form-action');
+define('BHRLD_DONATION_REOCCURANCE_ONCE', 0);
+define('BHRLD_DONATION_REOCCURANCE_SEMESTERLY', 2);
+define('BHRLD_DONATION_REOCCURANCE_MONTHLY', 12);
+define("BHRLD_DONATION_FORM_NONCE_ACTION", 'donation-form-action');
 
 
 //
 // Main business logic for creating a customer
 // and establishing a one-time or reoccuring charge
 // 
-function bhrld_donate_process_donation( $token, $name, $email, $amount, $commment, $reoccurance ) {
+function bhrld_donate_process_donation($token, $name, $email, $amount, $commment, $reoccurance)
+{
 	$error;
 	$amountInCents = $amount * 100;
 
 	try {
-		$customerID = bhrld_donate_create_customer( $token, $name, $email );
-	
-		if (BHRLD_DONATION_REOCCURANCE_ONCE == $reoccurance) {
-			$charge = bhrld_get_stripe_charge_object( $customerID, $amountInCents, $comment );
-			\Stripe\Charge::create( $charge );
-		} else {
-			$subscription = bhrld_get_stripe_subscription_object( $customerID, $amountInCents, $comment, $reoccurance);
-			\Stripe\Subscription::create( $subscription );
-		}
+		$customerID = bhrld_donate_create_customer($token, $name, $email);
 
-	} catch(\Stripe\Exception\CardException $e) {
+		if (BHRLD_DONATION_REOCCURANCE_ONCE == $reoccurance) {
+			$charge = bhrld_get_stripe_charge_object($customerID, $amountInCents, $comment);
+			\Stripe\Charge::create($charge);
+		} else {
+			$subscription = bhrld_get_stripe_subscription_object($customerID, $amountInCents, $comment, $reoccurance);
+			\Stripe\Subscription::create($subscription);
+		}
+	} catch (\Stripe\Exception\CardException $e) {
 		$error = $e->getError()->message;
 	} catch (\Stripe\Exception\RateLimitException $e) {
 		bhrld_donate_send_webmaster_error_email("RateLimitException", $e);
@@ -50,8 +50,8 @@ function bhrld_donate_process_donation( $token, $name, $email, $amount, $commmen
 		$error = "Something went wrong and you were not charged. Administrators have been notified";
 	}
 
-	if( !$error ) {
-		bhrld_donate_send_reciept( $name, $email, $amount, $reoccurance );
+	if (!$error) {
+		bhrld_donate_send_reciept($name, $email, $amount, $reoccurance);
 		wp_send_json(array(
 			"success" => true
 		));
@@ -69,7 +69,8 @@ function bhrld_donate_process_donation( $token, $name, $email, $amount, $commmen
 // REGION: Creating customers
 //
 
-function bhrld_donate_create_customer( $token, $name, $email ) {
+function bhrld_donate_create_customer($token, $name, $email)
+{
 	$customer = \Stripe\Customer::create([
 		'source' => $token,
 		'email' => $email,
@@ -84,25 +85,28 @@ function bhrld_donate_create_customer( $token, $name, $email ) {
 // REGION: Creating charges
 //
 
-function bhrld_get_stripe_base_charge_object( $customerID, $comment ) {
+function bhrld_get_stripe_base_charge_object($customerID, $comment)
+{
 	return [
-		"metadata" => [ "comment" => $comment ],
+		"metadata" => ["comment" => $comment],
 		"customer" => $customerID,
 	];
 }
 
-function bhrld_get_stripe_charge_object( $customerID, $amountInCents, $comment ) {
-	$baseCharge = bhrld_get_stripe_base_charge_object( $customerID, $comment );
+function bhrld_get_stripe_charge_object($customerID, $amountInCents, $comment)
+{
+	$baseCharge = bhrld_get_stripe_base_charge_object($customerID, $comment);
 	$chargeDetails = [
 		"amount" => $amountInCents,
 		"currency" => "usd",
 		"description" => "Donation to The Badger Herald",
 	];
 
-	return array_merge( $baseCharge, $chargeDetails );
+	return array_merge($baseCharge, $chargeDetails);
 }
 
-function bhrld_get_stripe_subscription_object( $customerID, $amountInCents, $comment, $reoccurance ) {
+function bhrld_get_stripe_subscription_object($customerID, $amountInCents, $comment, $reoccurance)
+{
 	if ($reoccurance == BHRLD_DONATION_REOCCURANCE_SEMESTERLY) {
 		$product = STRIPE_SEMESTERLY_PROD;
 		$interval = 6;
@@ -113,7 +117,7 @@ function bhrld_get_stripe_subscription_object( $customerID, $amountInCents, $com
 		return;
 	}
 
-	$baseCharge = bhrld_get_stripe_base_charge_object( $customerID, $comment );
+	$baseCharge = bhrld_get_stripe_base_charge_object($customerID, $comment);
 	$subscription = [
 		"items" => [
 			[
@@ -130,7 +134,7 @@ function bhrld_get_stripe_subscription_object( $customerID, $amountInCents, $com
 		]
 	];
 
-	return array_merge( $baseCharge, $subscription );
+	return array_merge($baseCharge, $subscription);
 }
 
 
@@ -139,9 +143,10 @@ function bhrld_get_stripe_subscription_object( $customerID, $amountInCents, $com
 // REGION: emails
 //
 
-function bhrld_donate_send_reciept( $name, $email, $amount, $reoccurance ) {
+function bhrld_donate_send_reciept($name, $email, $amount, $reoccurance)
+{
 	$frequency = "One Time";
-	
+
 	if ($reoccurance == BHRLD_DONATION_REOCCURANCE_MONTHLY) {
 		$frequency = "Monthly";
 	} else if ($reoccurance == BHRLD_DONATION_REOCCURANCE_SEMESTERLY) {
@@ -149,9 +154,9 @@ function bhrld_donate_send_reciept( $name, $email, $amount, $reoccurance ) {
 	}
 
 	$headers = 'From: ' . BHRLD_SENDFROM_EMAIL . "\r\n" .
-	'Reply-To: ' . BHRLD_REPLYTO_EMAIL . "\r\n" .
-	'X-Mailer: PHP/' . phpversion();
-	
+		'Reply-To: ' . BHRLD_REPLYTO_EMAIL . "\r\n" .
+		'X-Mailer: PHP/' . phpversion();
+
 	$message = "$name, \n\r";
 	$message .= "\n\r";
 	$message .= "Thank you for your donation to The Badger Herald! \n\r";
@@ -165,18 +170,19 @@ function bhrld_donate_send_reciept( $name, $email, $amount, $reoccurance ) {
 	$message .= "\n\r";
 	$message .= "— The Badger Herald \n\r";
 
-	wp_mail( $email, "Thank you for your donation to The Badger Herald!", $message, $headers, null );
+	wp_mail($email, "Thank you for your donation to The Badger Herald!", $message, $headers, null);
 }
 
-function bhrld_donate_send_webmaster_error_email($subject, $error) {
+function bhrld_donate_send_webmaster_error_email($subject, $error)
+{
 	$headers = 'From: ' . BHRLD_SENDFROM_EMAIL . "\r\n" .
-	'Reply-To: ' . BHRLD_REPLYTO_EMAIL . "\r\n" .
-	'X-Mailer: PHP/' . phpversion();
-	
-	$message = "The following error occurred:" . "\r\n". "\r\n";
-	$message .= print_r($error,true);
+		'Reply-To: ' . BHRLD_REPLYTO_EMAIL . "\r\n" .
+		'X-Mailer: PHP/' . phpversion();
 
-	wp_mail( BHRLD_WEBMASTER_EMAIL , $subject, $message, $headers, null );
+	$message = "The following error occurred:" . "\r\n" . "\r\n";
+	$message .= print_r($error, true);
+
+	wp_mail(BHRLD_WEBMASTER_EMAIL, $subject, $message, $headers, null);
 }
 
 
@@ -185,45 +191,51 @@ function bhrld_donate_send_webmaster_error_email($subject, $error) {
 // REGION: Routes
 //
 
-function bhrld_donate_register_rest_route() {
-	register_rest_route( 'donate/v1', 'process-donation', array(
-		'methods'  => 'POST',
-		'callback' => 'bhrld_donate_process_donation_entry',
-		'args' => array(
-			'amount' => array(
-				'required'=> true,
-				'validate_callback' => function($param, $request, $key) {
-					return is_numeric( $param );
-				}
-			),
-			'nonce' => array(
-				'required' => true,
-				'validate_callback' => function($param, $request, $key) {
-					return 1 == wp_verify_nonce( $param, BHRLD_DONATION_FORM_NONCE_ACTION );
-				}
-			),
-			'token' => array(
-				'required' => true,
-			),
-			'recaptcha' => array(
-				'required' => true,
-				'validate_callback' => function($param, $request, $key) {
-					$recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
-					$recaptcha_secret = RECAPTCHA_SECRET_KEY;
-					$recaptcha_response = $param;
-					
-					$recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
-					$recaptcha = json_decode($recaptcha);
-					
-					return $recaptcha->score >= 0.5;
-				}
-			),
-			'reoccurance' => array(
-				'required' => true,
-				'validate_callback' => function($param, $request, $key) {
-					return $param == BHRLD_DONATION_REOCCURANCE_ONCE ||
-						$param == BHRLD_DONATION_REOCCURANCE_SEMESTERLY ||
-						$param == BHRLD_DONATION_REOCCURANCE_MONTHLY;
+function bhrld_donate_register_rest_route()
+{
+	register_rest_route(
+		'donate/v1',
+		'process-donation',
+		array(
+			'methods'  => 'POST',
+			'callback' => 'bhrld_donate_process_donation_entry',
+			'args' => array(
+				'amount' => array(
+					'required' => true,
+					'validate_callback' => function ($param, $request, $key) {
+						return is_numeric($param);
+					}
+				),
+				'nonce' => array(
+					'required' => true,
+					'validate_callback' => function ($param, $request, $key) {
+						return 1 == wp_verify_nonce($param, BHRLD_DONATION_FORM_NONCE_ACTION);
+					}
+				),
+				'token' => array(
+					'required' => true,
+				),
+				/*
+				'recaptcha' => array(
+					'required' => true,
+					'validate_callback' => function ($param, $request, $key) {
+						$recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify';
+						$recaptcha_secret = RECAPTCHA_SECRET_KEY;
+						$recaptcha_response = $param;
+
+						$recaptcha = file_get_contents($recaptcha_url . '?secret=' . $recaptcha_secret . '&response=' . $recaptcha_response);
+						$recaptcha = json_decode($recaptcha);
+
+						return $recaptcha->score >= 0.5;
+					}
+				),
+				*/
+				'reoccurance' => array(
+					'required' => true,
+					'validate_callback' => function ($param, $request, $key) {
+						return $param == BHRLD_DONATION_REOCCURANCE_ONCE ||
+							$param == BHRLD_DONATION_REOCCURANCE_SEMESTERLY ||
+							$param == BHRLD_DONATION_REOCCURANCE_MONTHLY;
 					}
 				)
 			)
@@ -232,19 +244,20 @@ function bhrld_donate_register_rest_route() {
 }
 add_action('rest_api_init', 'bhrld_donate_register_rest_route');
 
-function bhrld_donate_process_donation_entry( WP_REST_Request $request ) {
-	$token = $request->get_param( 'token' );
-	$amount = $request->get_param( 'amount' );
-	$comment = $request->get_param( 'comment' );
-	$email = $request->get_param( 'email' );
-	$first = $request->get_param( 'first' );
-	$last = $request->get_param( 'last' );
+function bhrld_donate_process_donation_entry(WP_REST_Request $request)
+{
+	$token = $request->get_param('token');
+	$amount = $request->get_param('amount');
+	$comment = $request->get_param('comment');
+	$email = $request->get_param('email');
+	$first = $request->get_param('first');
+	$last = $request->get_param('last');
 	$name = $first . ' ' . $last;
 
-	$reoccurance = $request->get_param( 'reoccurance' );
+	$reoccurance = $request->get_param('reoccurance');
 	$amountInCents = $amount * 100;
 
-	bhrld_donate_process_donation( $token, $name, $email, $amount, $commment, $reoccurance );
+	bhrld_donate_process_donation($token, $name, $email, $amount, $commment, $reoccurance);
 }
 
 
@@ -253,30 +266,36 @@ function bhrld_donate_process_donation_entry( WP_REST_Request $request ) {
 // 
 
 // Shortcode
-function bhrld_donation_form( $atts ) {
-	$atts = shortcode_atts( array(
-        'title' => 'Donate',
-        'subhead' => 'Support the Herald!'
-    ), $atts, 'badgerherald_donation_form' );
+function bhrld_donation_form($atts)
+{
+	$atts = shortcode_atts(array(
+		'title' => 'Donate',
+		'subhead' => 'Support the Herald!'
+	), $atts, 'badgerherald_donation_form');
 
-	wp_enqueue_script( 'donate-stripe-js' );
-	wp_enqueue_script( 'google-recaptcha' );
+	wp_enqueue_script('donate-stripe-js');
+	wp_enqueue_script('google-recaptcha');
 
-	
-	return apply_filters( 'bhrld_donate_form_shortcode', 
-								'<bhrld-donation-form class="shadow" 
+	return apply_filters(
+		'bhrld_donate_form_shortcode',
+		'<bhrld-donation-form class="shadow" 
 									formTitle="' . $atts["title"] . '"
 									subhead="' . $atts["subhead"] . '"
 									rk="' . RECAPTCHA_SITE_KEY . '"
-									pk="' . STRIPE_PUBLISHABLE_KEY . '" 
-									no="' . wp_create_nonce( BHRLD_DONATION_FORM_NONCE_ACTION ) . '"
-									ht="' . wp_create_nonce( 'wp_rest' ) . '"
-									></bhrld-donation-form>');	 
+									pk="' . STRIPE_PUBLISHABLE_KEY . '"
+									></bhrld-donation-form>'
+	);
 }
-add_shortcode( 'badgerherald_donation_form', 'bhrld_donation_form' );
+add_shortcode('badgerherald_donation_form', 'bhrld_donation_form');
 
-function bhrld_donate_enqueue() {
-	wp_register_script( 'donate-stripe-js', 'https://js.stripe.com/v3/', null, null, true );
-	wp_register_script( 'google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=' . RECAPTCHA_SITE_KEY , null, null, true );
+function bhrld_donate_enqueue()
+{
+	wp_register_script('donate-stripe-js', 'https://js.stripe.com/v3/', null, null, true);
+	wp_register_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=' . RECAPTCHA_SITE_KEY, null, null, true);
+
+	wp_localize_script('donate-stripe-js', 'donate', array(
+		'no' => wp_create_nonce(BHRLD_DONATION_FORM_NONCE_ACTION),
+		'ht' => wp_create_nonce('wp_rest')
+	));
 }
-add_action( 'wp_enqueue_scripts', 'bhrld_donate_enqueue' );
+add_action('wp_enqueue_scripts', 'bhrld_donate_enqueue');
